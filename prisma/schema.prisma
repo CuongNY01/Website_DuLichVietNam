@@ -1,0 +1,116 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        String    @id @default(uuid())
+  name      String
+  email     String    @unique
+  password  String
+  phone     String?
+  role      String    @default("USER")
+  status    String    @default("ACTIVE")
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  bookings  Booking[]
+  reviews   Review[]
+}
+
+model Tour {
+  id             String    @id
+  code           String    @unique
+  title          String
+  destination    String
+  departurePoint String
+  image          String
+  departureDate  String
+  time           String
+  duration       String
+  oldPrice       Int
+  price          Int
+  discount       String?
+  seats          Int
+  rating         Float
+  reviews_count  Int       @default(0)
+  category       String
+  description    String
+  features       String    // JSON stringified array
+  itinerary      String    // JSON stringified array
+  policies       String?   // JSON stringified array
+  createdAt      DateTime  @default(now())
+  updatedAt      DateTime  @updatedAt
+  bookings       Booking[]
+  reviews        Review[]
+}
+
+model Review {
+  id        String   @id @default(cuid())
+  content   String
+  rating    Int
+  createdAt DateTime @default(now())
+  tourId    String
+  tour      Tour     @relation(fields: [tourId], references: [id])
+  userId    String
+  user      User     @relation(fields: [userId], references: [id])
+}
+
+model Hotel {
+  id          String    @id
+  name        String
+  location    String
+  image       String
+  price       Int
+  oldPrice    Int
+  discount    String?
+  rating      Float
+  reviews     Int
+  stars       Int
+  description String
+  amenities   String    // JSON stringified array
+  rooms       String    // JSON stringified array
+  features    String    // JSON stringified array
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  bookings    Booking[]
+}
+
+model Booking {
+  id            String    @id
+  bookingCode   String    @unique
+  customerId    String?
+  customer      User?     @relation(fields: [customerId], references: [id])
+  customerName  String  
+  tourId        String?
+  tour          Tour?     @relation(fields: [tourId], references: [id])
+  hotelId       String?
+  hotel         Hotel?    @relation(fields: [hotelId], references: [id])
+  date          String
+  amount        Int
+  status        String    @default("Chờ xử lý")
+  paymentMethod String    @default("Tiền mặt")
+  paymentStatus String    @default("Chưa thanh toán")
+  transactionId String?
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+}
+
+model Article {
+  id        String    @id
+  title     String
+  date      String
+  category  String
+  image     String
+  excerpt   String
+  content   String
+  author    String
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+}

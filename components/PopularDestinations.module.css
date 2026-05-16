@@ -1,0 +1,66 @@
+.destGrid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  grid-template-rows: repeat(2, 250px);
+  gap: 20px;
+}
+
+.destCard {
+  position: relative;
+  border-radius: 16px;
+  overflow: hidden;
+  cursor: pointer;
+}
+
+.destCard:nth-child(1) {
+  grid-column: span 2;
+  grid-row: span 2;
+}
+
+.destCard img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.5s;
+}
+
+.destCard:hover img {
+  transform: scale(1.1);
+}
+
+.overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to top, rgba(0,0,0,0.7) 0%, transparent 60%);
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  padding: 24px;
+  color: white;
+}
+
+.destName {
+  font-size: 24px;
+  font-weight: 800;
+  margin-bottom: 4px;
+}
+
+.tourCount {
+  font-size: 14px;
+  opacity: 0.9;
+}
+
+@media (max-width: 992px) {
+  .destGrid {
+    grid-template-columns: repeat(2, 1fr);
+    grid-template-rows: auto;
+  }
+  .destCard:nth-child(1) {
+    grid-column: span 2;
+    grid-row: span 1;
+    height: 300px;
+  }
+  .destCard {
+    height: 250px;
+  }
+}
