@@ -104,7 +104,7 @@ export default function BookingPage({ params }: { params: Promise<{ id: string }
         <div style={{ textAlign: 'center', maxWidth: '400px', padding: '20px' }}>
           {paymentMethod === "VNPay" ? (
             <>
-              <img src="https://vnpay.vn/wp-content/uploads/2020/07/vnpay-logo.png" alt="VNPay" style={{ height: '50px', marginBottom: '24px' }} />
+              <img src="/vnpay-logo.png" alt="VNPay" style={{ height: '50px', marginBottom: '24px' }} />
               <div style={{ width: '60px', height: '60px', border: '5px solid #f3f3f3', borderTop: '5px solid #005baa', borderRadius: '50%', animation: 'spin 1s linear infinite', margin: '0 auto 24px' }}></div>
               <h2 style={{ fontSize: '20px', color: '#005baa', fontWeight: 800 }}>ĐANG KẾT NỐI VỚI VNPAY...</h2>
               <p style={{ color: 'var(--text-gray)', marginTop: '8px' }}>Vui lòng thực hiện thanh toán trên ứng dụng ngân hàng hoặc quét mã QR sẽ hiển thị trong giây lát.</p>
@@ -234,7 +234,7 @@ export default function BookingPage({ params }: { params: Promise<{ id: string }
                  <label style={{ display: 'flex', alignItems: 'center', gap: '12px', padding: '16px', border: paymentMethod === 'VNPay' ? '1.5px solid var(--primary-blue)' : '1px solid var(--border-color)', borderRadius: 'var(--radius-md)', backgroundColor: paymentMethod === 'VNPay' ? 'rgba(10, 88, 163, 0.05)' : 'white', cursor: 'pointer' }}>
                    <input type="radio" name="payment" checked={paymentMethod === 'VNPay'} onChange={() => setPaymentMethod('VNPay')} style={{ width: '18px', height: '18px' }} />
                    <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-                     <img src="https://vnpay.vn/wp-content/uploads/2020/07/vnpay-logo.png" alt="VNPay" style={{ height: '24px' }} />
+                     <img src="/vnpay-logo.png" alt="VNPay" style={{ height: '24px' }} />
                      <div>
                        <strong style={{ display: 'block', fontSize: '15px', color: 'var(--text-dark)' }}>Cổng thanh toán VNPAY</strong>
                        <span style={{ fontSize: '13px', color: 'var(--text-gray)' }}>Thanh toán qua ứng dụng ngân hàng, quét mã QR</span>

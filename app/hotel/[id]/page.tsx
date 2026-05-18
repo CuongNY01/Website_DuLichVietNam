@@ -146,9 +146,9 @@ export default function HotelDetailPage({ params }: { params: Promise<{ id: stri
                           <div style={{ fontSize: '22px', fontWeight: 900, color: 'var(--accent-red)' }}>{formatCurrency(room.price)}</div>
                           <div style={{ fontSize: '12px', color: 'var(--text-gray)' }}>/đêm (đã gồm thuế)</div>
                         </div>
-                        <button style={{ backgroundColor: 'var(--accent-red)', color: 'white', padding: '10px 24px', borderRadius: 'var(--radius-sm)', fontWeight: 700, border: 'none', cursor: 'pointer', transition: 'transform 0.2s' }}>
+                        <Link href={`/book-hotel/${hotel.id}?roomName=${encodeURIComponent(room.name)}`} style={{ display: 'inline-block', backgroundColor: 'var(--accent-red)', color: 'white', padding: '10px 24px', borderRadius: 'var(--radius-sm)', fontWeight: 700, border: 'none', cursor: 'pointer', transition: 'transform 0.2s', textDecoration: 'none', textAlign: 'center' }}>
                           ĐẶT PHÒNG
-                        </button>
+                        </Link>
                       </div>
                     </div>
                   </div>

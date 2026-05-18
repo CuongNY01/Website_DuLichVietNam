@@ -64,14 +64,15 @@ export async function POST(req: Request) {
         bookingCode,
         customerId: user.id,
         customerName: user.name,
-        tourId: data.tourId,
+        tourId: data.tourId || null,
+        hotelId: data.hotelId || null,
         date: new Date().toLocaleDateString('vi-VN'),
         amount: data.amount,
         status: "Chờ xử lý",
         paymentMethod: paymentMethod,
         paymentStatus: "Chưa thanh toán"
       },
-      include: { tour: true }
+      include: { tour: true, hotel: true }
     });
 
     // Gửi email nếu khách hàng chọn Tiền mặt hoặc phương thức khác (trừ VNPay vì VNPay sẽ gửi mail sau khi thanh toán xong)
