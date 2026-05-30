@@ -80,3 +80,38 @@ export const sendBookingConfirmationEmail = async (booking: any, userEmail: stri
     return false;
   }
 };
+
+export const sendPasswordResetEmail = async (email: string, name: string, resetLink: string) => {
+  const htmlTemplate = `
+    <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; border: 1px solid #e5e7eb; border-radius: 8px;">
+      <h2 style="color: #0A58A3; text-align: center; margin-bottom: 20px;">VongQuanhTheGioi - Du Lịch Việt Nam</h2>
+      <p>Xin chào <strong>${name}</strong>,</p>
+      <p>Bạn nhận được email này vì bạn (hoặc ai đó) đã yêu cầu đặt lại mật khẩu cho tài khoản liên kết với email này.</p>
+      <p>Vui lòng nhấp vào nút dưới đây để tiến hành đặt lại mật khẩu mới. Liên kết này có giá trị trong vòng 1 giờ:</p>
+      <div style="text-align: center; margin: 30px 0;">
+        <a href="${resetLink}" style="background-color: #0A58A3; color: white; padding: 12px 24px; text-decoration: none; border-radius: 4px; font-weight: bold; display: inline-block; box-shadow: 0 4px 6px rgba(10, 88, 163, 0.2);">Đặt lại mật khẩu</a>
+      </div>
+      <p>Nếu nút trên không hoạt động, bạn có thể sao chép và dán liên kết dưới đây vào trình duyệt:</p>
+      <p style="word-break: break-all; color: #4b5563; background: #f3f4f6; padding: 12px; border-radius: 4px; font-size: 13px;">${resetLink}</p>
+      <hr style="border: none; border-top: 1px solid #e5e7eb; margin: 20px 0;" />
+      <p style="font-size: 12px; color: #9ca3af;">Nếu bạn không yêu cầu đặt lại mật khẩu, vui lòng bỏ qua email này.</p>
+    </div>
+  `;
+
+  const mailOptions = {
+    from: `"Du Lịch Việt Nam" <${process.env.SMTP_USER}>`,
+    to: email,
+    subject: "Đặt lại mật khẩu - Du Lịch Việt Nam",
+    html: htmlTemplate,
+  };
+
+  try {
+    const info = await transporter.sendMail(mailOptions);
+    console.log('Password reset email sent: %s', info.messageId);
+    return true;
+  } catch (error) {
+    console.error('Error sending password reset email:', error);
+    return false;
+  }
+};
+
