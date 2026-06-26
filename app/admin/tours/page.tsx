@@ -95,7 +95,7 @@ export default function ToursManagement() {
 
   const fetchTours = async () => {
     try {
-      const res = await fetch('/api/admin/tours');
+      const res = await fetch('/api/admin/tours', { cache: 'no-store' });
       const data = await res.json();
       setTours(data);
     } catch (error) {

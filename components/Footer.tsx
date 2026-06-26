@@ -32,8 +32,6 @@ export default function Footer() {
             <ul className={styles.linkList}>
               <li><Link href="/terms" className={styles.link}>Điều khoản chung</Link></li>
               <li><Link href="/terms" className={styles.link}>Chính sách bảo mật</Link></li>
-              <li><Link href="/terms" className={styles.link}>Chính sách đổi trả</Link></li>
-              <li><Link href="/login" className={styles.link}>Quyền lợi hội viên</Link></li>
             </ul>
           </div>
           <div className={styles.col}>

@@ -13,12 +13,11 @@ function BookingForm({ resolvedParams }: { resolvedParams: { id: string } }) {
   const searchParams = useSearchParams();
   const roomName = searchParams.get('roomName');
   
-  const [hotel, setHotel] = useState<Hotel | null>(null);
+  const hotel = hotels.find(h => h.id === resolvedParams.id) || null;
   const [roomType, setRoomType] = useState('Phòng Đơn');
   const [numRooms, setNumRooms] = useState(1);
   const [checkIn, setCheckIn] = useState('');
   const [checkOut, setCheckOut] = useState('');
-  const [nights, setNights] = useState(1);
   
   const [success, setSuccess] = useState(false);
   const [isProcessing, setIsProcessing] = useState(false);
@@ -31,22 +30,14 @@ function BookingForm({ resolvedParams }: { resolvedParams: { id: string } }) {
     }
   }, [status, router, resolvedParams.id, roomName]);
 
-  useEffect(() => {
-    const h = hotels.find(h => h.id === resolvedParams.id);
-    if (h) {
-      setHotel(h);
-    }
-  }, [resolvedParams.id]);
-
-  useEffect(() => {
-    if (checkIn && checkOut) {
-      const start = new Date(checkIn);
-      const end = new Date(checkOut);
-      const diffTime = end.getTime() - start.getTime();
-      const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24)); 
-      setNights(diffDays > 0 ? diffDays : 1);
-    }
-  }, [checkIn, checkOut]);
+  let nights = 1;
+  if (checkIn && checkOut) {
+    const start = new Date(checkIn);
+    const end = new Date(checkOut);
+    const diffTime = end.getTime() - start.getTime();
+    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24)); 
+    nights = diffDays > 0 ? diffDays : 1;
+  }
 
   if (status === 'loading') return <div style={{ padding: '40px', textAlign: 'center' }}>Đang xác thực...</div>;
   if (!session) return null;

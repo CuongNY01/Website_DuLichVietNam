@@ -9,7 +9,7 @@ export async function GET(req: Request) {
     const url = new URL(req.url);
     const searchParams = url.searchParams;
     
-    let vnp_Params: any = {};
+    const vnp_Params: any = {};
     for (const [key, value] of searchParams.entries()) {
       vnp_Params[key] = value;
     }
@@ -46,6 +46,7 @@ export async function GET(req: Request) {
           },
           include: {
             tour: true,
+            hotel: true,
             customer: true
           }
         });
@@ -77,8 +78,8 @@ export async function GET(req: Request) {
 }
 
 function sortObject(obj: any) {
-  let sorted: any = {};
-  let str = [];
+  const sorted: any = {};
+  const str = [];
   let key;
   for (key in obj) {
     if (obj.hasOwnProperty(key)) {

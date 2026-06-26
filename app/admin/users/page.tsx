@@ -8,10 +8,6 @@ export default function UserManagement() {
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState("");
 
-  useEffect(() => {
-    fetchUsers();
-  }, []);
-
   const fetchUsers = async (searchTerm = "") => {
     setLoading(true);
     const res = await fetch(`/api/admin/users?search=${searchTerm}`);
@@ -21,6 +17,10 @@ export default function UserManagement() {
     }
     setLoading(false);
   };
+
+  useEffect(() => {
+    fetchUsers();
+  }, []);
 
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();

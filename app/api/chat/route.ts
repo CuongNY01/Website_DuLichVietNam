@@ -46,7 +46,7 @@ Yêu cầu:
       
       // 3. FALLBACK: Smart Local AI
       let filteredTours = tours;
-      let responseIntro = "Chào bạn! Tôi là trợ lý ảo. Dựa trên yêu cầu của bạn, tôi xin gợi ý các tour phù hợp:";
+      const responseIntro = "Chào bạn! Tôi là trợ lý ảo. Dựa trên yêu cầu của bạn, tôi xin gợi ý các tour phù hợp:";
 
       if (lastMessage.includes("hạ long")) {
         filteredTours = tours.filter(t => t.destination.toLowerCase().includes("hạ long") || t.title.toLowerCase().includes("hạ long"));

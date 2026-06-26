@@ -79,7 +79,7 @@ export default function HotelsManagement() {
 
   const fetchHotels = async () => {
     try {
-      const res = await fetch('/api/admin/hotels');
+      const res = await fetch('/api/admin/hotels', { cache: 'no-store' });
       const data = await res.json();
       setHotels(data);
     } catch (error) {

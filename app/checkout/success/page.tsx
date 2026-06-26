@@ -28,7 +28,7 @@ function SuccessContent() {
           </div>
        </div>
 
-       <p style={{ color: 'var(--text-gray)', marginBottom: '32px', lineHeight: 1.6 }}>Cảm ơn bạn đã tin tưởng dịch vụ của Vietravel Premium. Một bản sao vé điện tử đã được gửi đến email của bạn. Chúng tôi sẽ liên hệ với bạn trong vòng 24h tới.</p>
+       <p style={{ color: 'var(--text-gray)', marginBottom: '32px', lineHeight: 1.6 }}>Cảm ơn bạn đã tin tưởng dịch vụ của DuLichVietNam. Một bản sao vé điện tử đã được gửi đến email của bạn. Chúng tôi sẽ liên hệ với bạn trong vòng 24h tới.</p>
        
        <div style={{ display: 'flex', gap: '16px', justifyContent: 'center' }}>
         <Link href="/profile/orders" style={{ display: 'inline-block', border: '2px solid var(--primary-blue)', color: 'var(--primary-blue)', padding: '14px 32px', borderRadius: 'var(--radius-full)', fontWeight: 700, textTransform: 'uppercase' }}>Xem Lịch Sử Đặt Tour</Link>

@@ -60,6 +60,7 @@ function ResetPasswordForm() {
         setError(data.error || 'Đặt lại mật khẩu thất bại. Vui lòng thử lại.');
       }
     } catch (err) {
+      console.error("Reset password error:", err);
       setError('Lỗi kết nối đến máy chủ. Vui lòng thử lại.');
     } finally {
       setLoading(false);

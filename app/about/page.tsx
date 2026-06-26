@@ -18,7 +18,7 @@ export default function AboutPage() {
           <div>
             <h2 style={{ fontSize: '32px', fontWeight: 800, color: 'var(--text-dark)', marginBottom: '24px' }}>Hành trình 30 năm kiến tạo niềm vui</h2>
             <p style={{ fontSize: '17px', lineHeight: 1.8, color: 'var(--text-gray)', marginBottom: '24px' }}>Được thành lập từ năm 1995, Du Lịch Việt Nam đã không ngừng nỗ lực để trở thành thương hiệu du lịch hàng đầu không chỉ tại Việt Nam mà còn vươn tầm quốc tế. Với triết lý khách hàng là trung tâm, chúng tôi cam kết mang đến những giá trị và trải nghiệm du lịch khác biệt nhất.</p>
-            <p style={{ fontSize: '17px', lineHeight: 1.8, color: 'var(--text-gray)' }}>Chúng tôi tự hào là đơn vị tiên phong trong việc đổi mới sản phẩm, ứng dụng công nghệ để nâng cao chất lượng dịch vụ và bảo vệ môi trường thông qua các chương trình "Du lịch xanh".</p>
+            <p style={{ fontSize: '17px', lineHeight: 1.8, color: 'var(--text-gray)' }}>Chúng tôi tự hào là đơn vị tiên phong trong việc đổi mới sản phẩm, ứng dụng công nghệ để nâng cao chất lượng dịch vụ và bảo vệ môi trường thông qua các chương trình &quot;Du lịch xanh&quot;.</p>
           </div>
           <img src="/hero_bg.png" alt="About Du Lịch Việt Nam" style={{ width: '100%', borderRadius: 'var(--radius-lg)', boxShadow: 'var(--shadow-lg)' }} />
         </div>

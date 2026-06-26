@@ -31,6 +31,7 @@ export default function LoginPage() {
         router.refresh();
       }
     } catch (err) {
+      console.error("Login error:", err);
       setError('Đã có lỗi xảy ra. Vui lòng thử lại sau.');
     } finally {
       setLoading(false);
@@ -41,7 +42,7 @@ export default function LoginPage() {
     <main style={{ minHeight: "100vh", backgroundColor: "var(--background-light)", display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '40px 16px' }}>
       <div style={{ backgroundColor: 'white', padding: '48px', borderRadius: 'var(--radius-lg)', boxShadow: 'var(--shadow-lg)', width: '100%', maxWidth: '440px' }}>
         <div style={{ textAlign: 'center', marginBottom: '32px' }}>
-           <h1 style={{ fontSize: '24px', color: 'var(--primary-blue)', fontWeight: 800, marginBottom: '8px' }}><span style={{ color: 'var(--accent-red)' }}>VongQuanh</span>TheGioi</h1>
+           <h1 style={{ fontSize: '24px', color: 'var(--primary-blue)', fontWeight: 800, marginBottom: '8px' }}><span style={{ color: 'var(--accent-red)' }}>DuLich</span>VietNam</h1>
            <p style={{ color: 'var(--text-gray)', fontSize: '14px' }}>Đăng nhập để nhận nhiều ưu đãi dành cho hội viên</p>
         </div>
 

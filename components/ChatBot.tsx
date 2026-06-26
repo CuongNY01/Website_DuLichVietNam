@@ -1,6 +1,5 @@
 "use client";
 
-import { useChat } from "@ai-sdk/react";
 import { useSession } from "next-auth/react";
 import { useState, useRef, useEffect } from "react";
 import { FaComments, FaTimes, FaPaperPlane, FaLock } from "react-icons/fa";
@@ -43,7 +42,6 @@ export default function ChatBot() {
       } else {
         // Handle streaming (simplified)
         const reader = response.body?.getReader();
-        const decoder = new TextEncoder();
         let assistantContent = "";
         const assistantId = Date.now().toString() + "-ai";
         

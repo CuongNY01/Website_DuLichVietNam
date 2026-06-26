@@ -2,6 +2,7 @@
 
 import React from 'react';
 import { useRouter } from 'next/navigation';
+import styles from './TourSort.module.css';
 
 interface TourSortProps {
   currentSort: string;
@@ -28,7 +29,9 @@ export default function TourSort({ currentSort, destQuery, priceFilter, startPoi
     <select 
       defaultValue={currentSort}
       onChange={handleChange}
-      style={{ padding: '8px 12px', borderRadius: '6px', border: '1px solid var(--border-color)', outline: 'none', cursor: 'pointer' }}
+      className={styles.sortSelect}
+      aria-label="Sắp xếp danh sách tour"
+      title="Sắp xếp danh sách tour"
     >
       <option value="default">Mới nhất</option>
       <option value="priceAsc">Giá thấp đến cao</option>

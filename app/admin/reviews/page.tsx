@@ -13,7 +13,7 @@ export default function ReviewManagement() {
 
   const fetchReviews = async () => {
     try {
-      const res = await fetch('/api/admin/reviews');
+      const res = await fetch('/api/admin/reviews', { cache: 'no-store' });
       const data = await res.json();
       setReviews(data);
     } catch (error) {

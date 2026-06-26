@@ -13,6 +13,7 @@ export default function ReportsPage() {
   const [mounted, setMounted] = useState(false);
   const [data, setData] = useState<any>(null);
   const [loading, setLoading] = useState(true);
+  const [exportType, setExportType] = useState<'bookings' | 'revenue' | 'users' | 'tours' | 'hotels'>('bookings');
 
   useEffect(() => {
     setMounted(true);
@@ -21,7 +22,7 @@ export default function ReportsPage() {
 
   const fetchStats = async () => {
     try {
-      const res = await fetch('/api/admin/stats');
+      const res = await fetch('/api/admin/stats', { cache: 'no-store' });
       const json = await res.json();
       setData(json);
     } catch (error) {
@@ -31,25 +32,73 @@ export default function ReportsPage() {
     }
   };
 
-  const handleExport = (type: 'tours' | 'hotels' | 'bookings') => {
+  const handleExport = async (type: 'tours' | 'hotels' | 'bookings' | 'revenue' | 'users') => {
     if (!data) return;
     
     let exportData: any[] = [];
     let name = '';
     
     if (type === 'tours') { 
-      exportData = data.topTours; // Or fetch all tours
+      exportData = data.topTours.map((t: any) => ({
+        'Mã Tour': t.id,
+        'Tên Tour': t.title,
+        'Điểm đến': t.destination,
+        'Giá (VNĐ)': t.price,
+        'Đánh giá': t.rating
+      }));
       name = 'Danh-sach-Tours'; 
     }
     else if (type === 'hotels') { 
-      // Need hotels in stats or separate fetch
       alert("Chức năng đang được cập nhật cho Khách sạn");
       return;
     }
     else if (type === 'bookings') { 
-      // Should fetch all bookings for a real report
-      alert("Đang chuẩn bị dữ liệu xuất báo cáo...");
-      return;
+      try {
+        const res = await fetch('/api/admin/bookings', { cache: 'no-store' });
+        const bookings = await res.json();
+        
+        exportData = bookings.map((b: any) => ({
+          'Mã đơn': b.bookingCode,
+          'Khách hàng': b.customerName,
+          'Ngày đặt': b.date,
+          'Số tiền (VNĐ)': b.amount,
+          'Trạng thái': b.status,
+          'Thanh toán': b.paymentStatus
+        }));
+        name = 'Danh-sach-Dat-Tour';
+      } catch (err) {
+        alert("Lỗi khi tải dữ liệu báo cáo!");
+        return;
+      }
+    }
+    else if (type === 'users') { 
+      try {
+        const res = await fetch('/api/admin/users', { cache: 'no-store' });
+        const users = await res.json();
+        
+        exportData = users.map((u: any) => ({
+          'Mã KH': u.id,
+          'Tên KH': u.name,
+          'Email': u.email,
+          'SĐT': u.phone || 'Trống',
+          'Vai trò': u.role,
+          'Trạng thái': u.status,
+          'Ngày tham gia': new Date(u.createdAt).toLocaleDateString('vi-VN')
+        }));
+        name = 'Danh-sach-Khach-hang';
+      } catch (err) {
+        alert("Lỗi khi tải dữ liệu báo cáo!");
+        return;
+      }
+    }
+    else if (type === 'revenue') { 
+      if (data && data.revenueData) {
+        exportData = data.revenueData.map((r: any) => ({
+          'Thời gian': r.name,
+          'Doanh thu (Triệu VNĐ)': r.revenue
+        }));
+        name = 'Bao-cao-Doanh-thu';
+      }
     }
     
     exportToExcel(exportData, name, type.toUpperCase());
@@ -65,9 +114,19 @@ export default function ReportsPage() {
     <div>
       <div className={styles.pageHeader}>
         <h1 className={styles.title}>Báo cáo & Thống kê</h1>
-        <div style={{ display: 'flex', gap: '10px' }}>
-          <button className={styles.addBtn} style={{ backgroundColor: '#166534' }} onClick={() => handleExport('bookings')}>
-             📥 Xuất Báo cáo Đặt tour
+        <div style={{ display: 'flex', gap: '12px', alignItems: 'center' }}>
+          <select 
+            className={styles.selectInput} 
+            value={exportType}
+            onChange={(e: any) => setExportType(e.target.value)}
+            style={{ padding: '8px 12px', borderRadius: '6px', border: '1px solid #cbd5e1', fontWeight: 600, color: '#334155' }}
+          >
+            <option value="bookings">Báo cáo Đặt tour</option>
+            <option value="revenue">Báo cáo Doanh thu</option>
+            <option value="users">Danh sách Khách hàng</option>
+          </select>
+          <button className={styles.addBtn} style={{ backgroundColor: '#166534' }} onClick={() => handleExport(exportType)}>
+             📥 Xuất Excel
           </button>
         </div>
       </div>
@@ -106,9 +165,8 @@ export default function ReportsPage() {
       <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '24px', marginBottom: '40px' }}>
         <div className={styles.statCard}>
           <h3 style={{ marginBottom: '20px', fontWeight: '600' }}>Tỷ trọng danh mục dịch vụ</h3>
-          <div style={{ height: '300px' }}>
-            <ResponsiveContainer width="100%" height="100%">
-              <PieChart>
+          <div style={{ height: '300px', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+              <PieChart width={350} height={250}>
                 <Pie
                   data={data.categoryData}
                   cx="50%"
@@ -117,6 +175,8 @@ export default function ReportsPage() {
                   outerRadius={80}
                   paddingAngle={5}
                   dataKey="value"
+                  nameKey="name"
+                  isAnimationActive={false}
                 >
                   {data.categoryData.map((entry: any, index: number) => (
                     <Cell key={`cell-${index}`} fill={["#3b82f6", "#10b981", "#f59e0b", "#ef4444"][index % 4]} />
@@ -125,15 +185,13 @@ export default function ReportsPage() {
                 <Tooltip />
                 <Legend />
               </PieChart>
-            </ResponsiveContainer>
           </div>
         </div>
 
         <div className={styles.statCard}>
           <h3 style={{ marginBottom: '20px', fontWeight: '600' }}>Trạng thái thanh toán đơn hàng</h3>
-          <div style={{ height: '300px' }}>
-            <ResponsiveContainer width="100%" height="100%">
-              <PieChart>
+          <div style={{ height: '300px', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+              <PieChart width={350} height={250}>
                 <Pie
                   data={data.statusData}
                   cx="50%"
@@ -142,6 +200,8 @@ export default function ReportsPage() {
                   outerRadius={80}
                   paddingAngle={5}
                   dataKey="value"
+                  nameKey="name"
+                  isAnimationActive={false}
                 >
                   {data.statusData.map((entry: any, index: number) => (
                     <Cell key={`cell-${index}`} fill={["#10b981", "#f59e0b", "#ef4444"][index % 3]} />
@@ -150,7 +210,6 @@ export default function ReportsPage() {
                 <Tooltip />
                 <Legend />
               </PieChart>
-            </ResponsiveContainer>
           </div>
         </div>
       </div>

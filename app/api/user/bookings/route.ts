@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import crypto from "crypto";
 import { prisma } from "@/lib/prisma";
 import { auth } from "@/auth";
 import { sendBookingConfirmationEmail } from "@/lib/mailer";
@@ -54,7 +55,7 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: "User not found" }, { status: 404 });
     }
 
-    const bookingId = require('crypto').randomBytes(16).toString('hex');
+    const bookingId = crypto.randomBytes(16).toString('hex');
     const bookingCode = `BK-${Math.random().toString(36).substring(2, 8).toUpperCase()}`;
     const paymentMethod = data.paymentMethod || "Tiền mặt";
 

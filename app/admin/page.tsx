@@ -22,7 +22,7 @@ export default function AdminDashboard() {
 
   const fetchStats = async () => {
     try {
-      const res = await fetch('/api/admin/stats');
+      const res = await fetch('/api/admin/stats', { cache: 'no-store' });
       const json = await res.json();
       setData(json);
     } catch (error) {
@@ -75,59 +75,7 @@ export default function AdminDashboard() {
           </div>
         </div>
 
-        <div className={styles.chartCard}>
-          <h3 className={styles.chartTitle}>Cơ cấu dịch vụ</h3>
-          <div style={{ width: '100%', height: 250, minWidth: 0, minHeight: 0 }}>
-            {mounted && (
-              <ResponsiveContainer width="100%" height="100%" minWidth={1} minHeight={1}>
-                <PieChart>
-                  <Pie
-                    data={data.categoryData}
-                    cx="50%"
-                    cy="50%"
-                    innerRadius={60}
-                    outerRadius={80}
-                    paddingAngle={5}
-                    dataKey="value"
-                  >
-                    {data.categoryData.map((entry: any, index: number) => (
-                      <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
-                    ))}
-                  </Pie>
-                  <Tooltip />
-                  <Legend verticalAlign="bottom" height={36}/>
-                </PieChart>
-              </ResponsiveContainer>
-            )}
-          </div>
-        </div>
 
-        <div className={styles.chartCard}>
-          <h3 className={styles.chartTitle}>Trạng thái đơn hàng</h3>
-          <div style={{ width: '100%', height: 250, minWidth: 0, minHeight: 0 }}>
-            {mounted && (
-              <ResponsiveContainer width="100%" height="100%" minWidth={1} minHeight={1}>
-                <PieChart>
-                  <Pie
-                    data={data.statusData}
-                    cx="50%"
-                    cy="50%"
-                    innerRadius={60}
-                    outerRadius={80}
-                    paddingAngle={5}
-                    dataKey="value"
-                  >
-                    {data.statusData.map((entry: any, index: number) => (
-                      <Cell key={`cell-${index}`} fill={["#10b981", "#f59e0b", "#ef4444"][index % 3]} />
-                    ))}
-                  </Pie>
-                  <Tooltip />
-                  <Legend verticalAlign="bottom" height={36}/>
-                </PieChart>
-              </ResponsiveContainer>
-            )}
-          </div>
-        </div>
       </div>
 
       <div className={styles.tableContainer}>

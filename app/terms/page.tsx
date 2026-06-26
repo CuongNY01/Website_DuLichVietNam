@@ -38,9 +38,7 @@ export default function TermsPage() {
            </div>
         </div>
 
-        <div style={{ marginTop: '40px', textAlign: 'center', color: 'var(--text-light)', fontSize: '13px' }}>
-           © 2026 Vietravel - Bản quyền nội dung đã được bảo hộ theo luật pháp Quốc tế và Việt Nam.
-        </div>
+
 
       </div>
     </main>

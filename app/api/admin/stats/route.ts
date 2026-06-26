@@ -2,6 +2,8 @@ import { NextResponse } from "next/server";
 import { auth } from "@/auth";
 import { prisma } from "@/lib/prisma";
 
+export const dynamic = 'force-dynamic';
+
 export async function GET() {
   const session = await auth();
   if ((session?.user as any)?.role !== "ADMIN") {
@@ -9,13 +11,22 @@ export async function GET() {
   }
 
   try {
+    const currentDate = new Date();
+    const currentMonthStart = new Date(currentDate.getFullYear(), currentDate.getMonth(), 1);
+
     const totalTours = await prisma.tour.count();
     const totalHotels = await prisma.hotel.count();
     const totalUsers = await prisma.user.count();
+    const newUsers = await prisma.user.count({
+      where: { createdAt: { gte: currentMonthStart } }
+    });
+    
     const totalBookings = await prisma.booking.count();
     
     const bookings = await prisma.booking.findMany();
-    const totalRevenue = bookings.reduce((sum, b) => sum + b.amount, 0);
+    const totalRevenue = bookings
+      .filter(b => b.paymentStatus === 'Đã thanh toán')
+      .reduce((sum, b) => sum + b.amount, 0);
 
     // Real monthly data for charts (last 6 months)
     const revenueData = [];
@@ -26,7 +37,9 @@ export async function GET() {
       
       const monthBookings = bookings.filter(b => {
         const bDate = new Date(b.createdAt);
-        return bDate.getMonth() === d.getMonth() && bDate.getFullYear() === d.getFullYear();
+        return bDate.getMonth() === d.getMonth() && 
+               bDate.getFullYear() === d.getFullYear() &&
+               b.paymentStatus === 'Đã thanh toán';
       });
       
       const monthRevenue = monthBookings.reduce((sum, b) => sum + b.amount, 0);
@@ -51,13 +64,16 @@ export async function GET() {
 
     const totalArticles = await prisma.article.count();
     const totalReviews = await prisma.review.count();
+    const newReviews = await prisma.review.count({
+      where: { createdAt: { gte: currentMonthStart } }
+    });
 
     return NextResponse.json({
       stats: [
         { label: "Tổng doanh thu", value: `${(totalRevenue / 1000000).toLocaleString('vi-VN')}Tr VNĐ`, icon: "💰" },
         { label: "Tổng đơn hàng", value: totalBookings, icon: "📦" },
-        { label: "Người dùng mới", value: totalUsers, icon: "👤" },
-        { label: "Đánh giá mới", value: totalReviews, icon: "⭐" },
+        { label: "Người dùng mới", value: newUsers, icon: "👤" },
+        { label: "Đánh giá mới", value: newReviews, icon: "⭐" },
         { label: "Bài viết", value: totalArticles, icon: "📝" },
         { label: "Tours hiện có", value: totalTours, icon: "🗺️" },
       ],

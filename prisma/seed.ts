@@ -101,6 +101,45 @@ async function main() {
     });
   }
 
+  // 5. User and Reviews
+  const mockUser = await prisma.user.upsert({
+    where: { email: 'testuser@example.com' },
+    update: {},
+    create: {
+      name: 'Nguyễn Văn A',
+      email: 'testuser@example.com',
+      password: 'password123',
+    }
+  });
+
+  await prisma.review.deleteMany({
+    where: { userId: mockUser.id }
+  });
+
+  const reviewsData = [
+    { content: "Tour rất tuyệt vời, HDV nhiệt tình.", rating: 5, tourId: "vn-01" },
+    { content: "Đồ ăn ngon, chỗ ở thoải mái. Rất đáng tiền.", rating: 4, tourId: "vn-02" },
+    { content: "Phong cảnh tuyệt đẹp, gia đình tôi đã có một chuyến đi đáng nhớ.", rating: 5, tourId: "vn-03" },
+    { content: "Giá cả hợp lý, tuy nhiên lịch trình hơi dày đặc.", rating: 4, tourId: "vn-04" },
+    { content: "Dịch vụ hoàn hảo từ A đến Z, sẽ giới thiệu cho bạn bè.", rating: 5, tourId: "vn-05" },
+    { content: "Chất lượng đúng như quảng cáo, xe đưa đón mới và sạch sẽ.", rating: 5, tourId: "vn-06" },
+    { content: "Cảnh báo một số điểm tham quan hơi đông đúc vào dịp lễ.", rating: 4, tourId: "vn-07" },
+    { content: "Hướng dẫn viên cực kỳ hài hước và am hiểu lịch sử.", rating: 5, tourId: "vn-08" },
+    { content: "Mình đi trúng ngày mưa nên hơi buồn xíu, nhưng tour tổ chức tốt.", rating: 4, tourId: "vn-09" },
+    { content: "Một chuyến đi chữa lành thực sự, cảm ơn công ty.", rating: 5, tourId: "vn-10" }
+  ];
+
+  for (const review of reviewsData) {
+    await prisma.review.create({
+      data: {
+        content: review.content,
+        rating: review.rating,
+        tourId: review.tourId,
+        userId: mockUser.id
+      }
+    });
+  }
+
   console.log('Seeding completed!');
 }
 

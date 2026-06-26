@@ -10,8 +10,41 @@ const transporter = nodemailer.createTransport({
 
 export const sendBookingConfirmationEmail = async (booking: any, userEmail: string) => {
   const isPaid = booking.paymentStatus === "Đã thanh toán";
-  const titleText = isPaid ? "Xác Nhận Thanh Toán & Vé Điện Tử" : "Xác Nhận Đặt Tour (Chờ Thanh Toán)";
+  const isHotel = !!booking.hotelId;
+  const serviceType = isHotel ? "Đặt Phòng Khách Sạn" : "Đặt Tour Du Lịch";
   
+  const titleText = isPaid 
+    ? `Xác Nhận Thanh Toán & Vé Điện Tử (${serviceType})` 
+    : `Xác Nhận ${serviceType} (Chờ Thanh Toán)`;
+
+  const noteContent = !isPaid 
+    ? `Đơn hàng của Quý khách đang ở trạng thái chờ thanh toán. Vui lòng thanh toán sớm để đảm bảo giữ chỗ/phòng. Quý khách có thể vào mục "Chuyến đi của tôi" trên website để thanh toán trực tuyến.`
+    : isHotel
+      ? `Giao dịch thanh toán đã được xác nhận. Đây chính là Vé Đăng Ký Phòng Điện Tử của Quý khách. Vui lòng xuất trình email này khi nhận phòng tại khách sạn.`
+      : `Giao dịch thanh toán đã được xác nhận. Đây cũng chính là Vé Điện Tử (E-Ticket) của Quý khách. Vui lòng xuất trình email này cho hướng dẫn viên vào ngày khởi hành.`;
+
+  const itemDetailsRow = isHotel
+    ? `
+      <tr>
+        <td style="padding: 8px 0; border-bottom: 1px solid #e2e8f0; color: #64748b;">Khách sạn:</td>
+        <td style="padding: 8px 0; border-bottom: 1px solid #e2e8f0; color: #0f172a; font-weight: bold; text-align: right;">${booking.hotel?.name || 'N/A'}</td>
+      </tr>
+      <tr>
+        <td style="padding: 8px 0; border-bottom: 1px solid #e2e8f0; color: #64748b;">Địa điểm:</td>
+        <td style="padding: 8px 0; border-bottom: 1px solid #e2e8f0; color: #0f172a; text-align: right;">${booking.hotel?.location || 'N/A'}</td>
+      </tr>
+    `
+    : `
+      <tr>
+        <td style="padding: 8px 0; border-bottom: 1px solid #e2e8f0; color: #64748b;">Tour:</td>
+        <td style="padding: 8px 0; border-bottom: 1px solid #e2e8f0; color: #0f172a; font-weight: bold; text-align: right;">${booking.tour?.title || 'N/A'}</td>
+      </tr>
+      <tr>
+        <td style="padding: 8px 0; border-bottom: 1px solid #e2e8f0; color: #64748b;">Mã Tour:</td>
+        <td style="padding: 8px 0; border-bottom: 1px solid #e2e8f0; color: #0f172a; text-align: right;">${booking.tour?.code || 'N/A'}</td>
+      </tr>
+    `;
+
   const htmlTemplate = `
     <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; border: 1px solid #e2e8f0; border-radius: 8px;">
       <div style="text-align: center; margin-bottom: 24px;">
@@ -28,10 +61,7 @@ export const sendBookingConfirmationEmail = async (booking: any, userEmail: stri
             <td style="padding: 8px 0; border-bottom: 1px solid #e2e8f0; color: #64748b;">Mã đơn hàng:</td>
             <td style="padding: 8px 0; border-bottom: 1px solid #e2e8f0; color: #0f172a; font-weight: bold; text-align: right;">#${booking.bookingCode}</td>
           </tr>
-          <tr>
-            <td style="padding: 8px 0; border-bottom: 1px solid #e2e8f0; color: #64748b;">Mã Tour:</td>
-            <td style="padding: 8px 0; border-bottom: 1px solid #e2e8f0; color: #0f172a; text-align: right;">${booking.tour?.code || 'N/A'}</td>
-          </tr>
+          ${itemDetailsRow}
           <tr>
             <td style="padding: 8px 0; border-bottom: 1px solid #e2e8f0; color: #64748b;">Ngày đặt:</td>
             <td style="padding: 8px 0; border-bottom: 1px solid #e2e8f0; color: #0f172a; text-align: right;">${booking.date}</td>
@@ -49,11 +79,11 @@ export const sendBookingConfirmationEmail = async (booking: any, userEmail: stri
 
       ${!isPaid ? `
       <div style="background-color: #fff7ed; border-left: 4px solid #ea580c; padding: 16px; margin-bottom: 24px; color: #9a3412;">
-        <strong>Lưu ý:</strong> Đơn hàng của Quý khách đang ở trạng thái chờ thanh toán. Vui lòng thanh toán sớm để đảm bảo giữ chỗ. Quý khách có thể vào mục "Chuyến đi của tôi" trên website để thanh toán trực tuyến.
+        <strong>Lưu ý:</strong> ${noteContent}
       </div>
       ` : `
       <div style="background-color: #f0fdf4; border-left: 4px solid #16a34a; padding: 16px; margin-bottom: 24px; color: #166534;">
-        <strong>Thành công:</strong> Giao dịch thanh toán đã được xác nhận. Đây cũng chính là Vé Điện Tử (E-Ticket) của Quý khách. Vui lòng xuất trình email này cho hướng dẫn viên vào ngày khởi hành.
+        <strong>Thành công:</strong> ${noteContent}
       </div>
       `}
 

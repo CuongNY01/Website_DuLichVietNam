@@ -9,20 +9,20 @@ export default function BookingsManagement() {
   const [loading, setLoading] = useState(true);
   const [filter, setFilter] = useState("Tất cả");
 
-  useEffect(() => {
-    fetchBookings();
-  }, []);
-
   const fetchBookings = async () => {
     setLoading(true);
-    const res = await fetch('/api/admin/bookings');
+    const res = await fetch('/api/admin/bookings', { cache: 'no-store' });
     const data = await res.json();
     setBookings(data);
     setLoading(false);
   };
 
-  const filteredBookings = filter === "Tất cả" 
-    ? bookings 
+  useEffect(() => {
+    fetchBookings();
+  }, []);
+
+  const filteredBookings = filter === "Tất cả"
+    ? bookings
     : bookings.filter(b => b.status === filter);
 
   const updateStatus = async (id: string, newStatus: string) => {
@@ -74,8 +74,8 @@ export default function BookingsManagement() {
       <div className={styles.pageHeader}>
         <h1 className={styles.title}>Quản lý đơn đặt Tour</h1>
         <div style={{ display: 'flex', gap: '12px' }}>
-          <select 
-            className={styles.addBtn} 
+          <select
+            className={styles.addBtn}
             style={{ backgroundColor: 'white', color: '#334155', border: '1px solid #e2e8f0' }}
             value={filter}
             onChange={(e) => setFilter(e.target.value)}
@@ -114,11 +114,11 @@ export default function BookingsManagement() {
                   <span style={{ fontSize: '0.85rem', color: 'var(--primary-blue)', fontWeight: '600' }}>{booking.paymentMethod}</span>
                 </td>
                 <td>
-                  <select 
-                    style={{ 
-                      fontSize: '0.75rem', 
-                      padding: '4px', 
-                      borderRadius: '4px', 
+                  <select
+                    style={{
+                      fontSize: '0.75rem',
+                      padding: '4px',
+                      borderRadius: '4px',
                       border: 'none',
                       backgroundColor: booking.paymentStatus === 'Đã thanh toán' ? '#dcfce7' : '#fee2e2',
                       color: booking.paymentStatus === 'Đã thanh toán' ? '#166534' : '#991b1b',
@@ -132,10 +132,10 @@ export default function BookingsManagement() {
                   </select>
                 </td>
                 <td>
-                  <span style={{ 
-                    padding: '4px 10px', 
-                    borderRadius: '20px', 
-                    fontSize: '0.75rem', 
+                  <span style={{
+                    padding: '4px 10px',
+                    borderRadius: '20px',
+                    fontSize: '0.75rem',
                     fontWeight: '600',
                     color: getStatusColor(booking.status),
                     backgroundColor: getStatusBg(booking.status)
@@ -144,7 +144,7 @@ export default function BookingsManagement() {
                   </span>
                 </td>
                 <td>
-                  <select 
+                  <select
                     style={{ fontSize: '0.8rem', padding: '4px', borderRadius: '4px', border: '1px solid #e2e8f0' }}
                     value={booking.status}
                     onChange={(e) => updateStatus(booking.id, e.target.value)}

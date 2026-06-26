@@ -1,0 +1,9 @@
+.sortSelect {
+  padding: 8px 12px;
+  border-radius: 6px;
+  border: 1px solid var(--border-color);
+  outline: none;
+  cursor: pointer;
+  background-color: white;
+  color: var(--text-dark);
+}

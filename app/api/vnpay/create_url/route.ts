@@ -70,8 +70,8 @@ export async function POST(req: Request) {
 }
 
 function sortObject(obj: any) {
-  let sorted: any = {};
-  let str = [];
+  const sorted: any = {};
+  const str = [];
   let key;
   for (key in obj) {
     if (obj.hasOwnProperty(key)) {

@@ -58,8 +58,10 @@ export default function UserOrdersPage() {
         {/* Sidebar (Reusable from Profile) */}
         <aside style={{ width: '100%', maxWidth: '300px', backgroundColor: 'white', padding: '32px 24px', borderRadius: 'var(--radius-md)', border: '1px solid var(--border-color)', height: 'fit-content' }}>
           <div style={{ textAlign: 'center', marginBottom: '32px' }}>
-            <div style={{ width: '80px', height: '80px', backgroundColor: 'var(--primary-blue)', color: 'white', borderRadius: '50%', margin: '0 auto 16px', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '32px', fontWeight: 700 }}>H</div>
-            <h2 style={{ fontSize: '20px', color: 'var(--text-dark)', fontWeight: 800 }}>Hi, Hà Cường</h2>
+            <div style={{ width: '80px', height: '80px', backgroundColor: 'var(--primary-blue)', color: 'white', borderRadius: '50%', margin: '0 auto 16px', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '32px', fontWeight: 700 }}>
+              {session.user?.name?.charAt(0).toUpperCase() || 'U'}
+            </div>
+            <h2 style={{ fontSize: '20px', color: 'var(--text-dark)', fontWeight: 800 }}>Hi, {session.user?.name || 'Khách'}</h2>
           </div>
           <nav style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
             <Link href="/profile" style={{ padding: '12px', borderRadius: 'var(--radius-sm)', color: 'var(--text-dark)', fontWeight: 600 }}>Quản lý tài khoản</Link>
@@ -127,6 +129,7 @@ export default function UserOrdersPage() {
                                     alert('Lỗi tạo thanh toán VNPay');
                                   }
                                 } catch (error) {
+                                  console.error("Payment error:", error);
                                   alert('Lỗi kết nối máy chủ');
                                 }
                               }}

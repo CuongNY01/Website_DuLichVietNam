@@ -22,7 +22,7 @@ export default async function ToursPage({
 
   // Build Prisma query
   // ... (rest of query logic remains the same)
-  let where: any = {};
+  const where: any = {};
   if (destQuery) {
     where.OR = [
       { destination: { contains: destQuery } },
@@ -39,7 +39,7 @@ export default async function ToursPage({
     else if (priceFilter === 'over20') where.price = { gt: 20000000 };
   }
 
-  let orderBy: any = {};
+  const orderBy: any = {};
   if (sort === 'priceAsc') orderBy.price = 'asc';
   else if (sort === 'priceDesc') orderBy.price = 'desc';
   else if (sort === 'rating') orderBy.rating = 'desc';

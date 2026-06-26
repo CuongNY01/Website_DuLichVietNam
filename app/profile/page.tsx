@@ -46,6 +46,7 @@ export default function ProfilePage() {
         alert(data.error || 'Lỗi đổi mật khẩu');
       }
     } catch (error) {
+      console.error("Change password error:", error);
       alert('Lỗi hệ thống');
     } finally {
       setLoading(false);
@@ -74,7 +75,7 @@ export default function ProfilePage() {
       fetchProfile();
       fetchBookingStats();
     }
-  }, [status, session]);
+  }, [status, session, router]);
 
   const fetchProfile = async () => {
     try {
@@ -131,6 +132,7 @@ export default function ProfilePage() {
         alert('Cập nhật thông tin thành công!');
       }
     } catch (error) {
+      console.error("Profile update error:", error);
       alert('Lỗi cập nhật thông tin');
     } finally {
       setLoading(false);

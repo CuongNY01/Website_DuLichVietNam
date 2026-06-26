@@ -26,7 +26,7 @@ export default function ArticleManagement() {
 
   const fetchArticles = async () => {
     try {
-      const res = await fetch('/api/admin/articles');
+      const res = await fetch('/api/admin/articles', { cache: 'no-store' });
       const data = await res.json();
       setArticles(data);
     } catch (error) {
